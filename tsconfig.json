@@ -5,7 +5,12 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "~/*": ["./*"]
+    },
+    "allowImportingTsExtensions": true
   },
   "include": ["src/**/*.ts"]
 }

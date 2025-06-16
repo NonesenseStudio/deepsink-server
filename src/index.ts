@@ -1,5 +1,8 @@
-const greet = (name: string): string => {
-  return `Hello ${name}, from pnpm + TypeScript!`;
-};
+import app from "./app";
+import * as process from "node:process";
 
-console.log(greet("Developer"));
+const PORT = process.env.Port || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
