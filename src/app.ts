@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { Sequelize } from "sequelize";
 import jwt from "jsonwebtoken";
-import main from "@/routes/main.ts";
+import main from "@/routes/main";
 import "@/config/db.config";
 
 const app = express();
