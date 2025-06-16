@@ -1,12 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { Sequelize } from "sequelize";
-import jwt from "jsonwebtoken";
-import main from "@/routes/main";
-import "@/config/db.config";
+import { sequelize } from "./config/db.config";
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
-app.use("/api", main);
-require("@/config/modules/user.config");
-app.listen(3000);
+// 配置中间件
+app.use(bodyParser.json());
+
+//注册接口
+app.use("/api/auth", authRoutes);
+
+// 同步 Sequelize 模型
+sequelize.sync().then(() => {});
 export default app;

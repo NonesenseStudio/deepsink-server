@@ -4,5 +4,5 @@ import * as process from "node:process";
 const PORT = process.env.Port || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`服务器正在运行在 http://localhost:${PORT}`);
 });
