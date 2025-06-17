@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "wrangler types & tsc",
+    "build": "tsc",
     "start": "nodemon dist/index.js",
     "dev": "nodemon --watch src -e ts --exec ts-node src/index.ts"
   },
