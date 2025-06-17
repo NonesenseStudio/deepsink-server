@@ -13,9 +13,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.11.1",
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.6",
-    "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.3",
     "@types/swagger-jsdoc": "^6.0.4",
@@ -26,11 +24,10 @@
     "wrangler": "^4.20.0"
   },
   "dependencies": {
-    "bcrypt": "^6.0.0",
+    "@hono/node-server": "^1.14.4",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "hono": "^4.7.11",
     "jsonwebtoken": "^9.0.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
