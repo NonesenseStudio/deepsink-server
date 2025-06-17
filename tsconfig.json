@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ESNext",
     "module": "NodeNext",
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
+    "types": ["worker-configuration.d.ts", "node"]
   },
   "include": ["src/**/*.ts"]
 }

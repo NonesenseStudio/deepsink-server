@@ -1,7 +1,6 @@
-import { Sequelize } from "sequelize";
+import { getPlatformProxy } from "wrangler";
 
-export const sequelize = new Sequelize("deep_sink", "root", "root", {
-  host: "localhost",
-  dialect: "mysql",
-  port: 3306,
-});
+export default (async () => {
+  const { env } = await getPlatformProxy();
+  return env.DB; // 通过binding名称"DB"获取实例
+})();

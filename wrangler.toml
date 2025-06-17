@@ -1,0 +1,14 @@
+main = "./src/index.ts"
+name = "deep_sink"
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2025-06-17"
+workers_dev = true
+#cloudflare_api_key = "K5ZCS3O57SgJTCCFI9H6sKVlSeys2O81e_wFXfK7“
+
+[[d1_databases]]
+binding = "DB"
+database_name = "deep_sink"
+database_id = "6da38cbb-f76a-427c-b402-f6f5232ce138"
+
+[observability.logs]
+enabled = true
