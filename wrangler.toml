@@ -1,5 +1,5 @@
 main = "./src/index.ts"
-name = "deep_sink"
+name = "deepsink-server"
 compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2025-06-17"
 workers_dev = true
