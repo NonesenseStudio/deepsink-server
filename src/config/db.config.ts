@@ -1,6 +1,9 @@
-import { getPlatformProxy } from "wrangler";
+import { drizzle } from "drizzle-orm/d1";
 
-export default (async () => {
-  const { env } = await getPlatformProxy();
-  return env.DB; // 通过binding名称"DB"获取实例
-})();
+export interface Env {
+  DB: D1Database;
+}
+
+export function DB(env: Env) {
+  return drizzle(env.DB);
+}
