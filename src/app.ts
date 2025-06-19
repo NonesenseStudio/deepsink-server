@@ -15,8 +15,8 @@ app.use("*", logger());
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 //注册接口
 app.get("/", (c) => c.text("Hono API"));
-app.route("/api/auth", authRoutes);
-app.get("/api/test", async () => {
+app.route("/auth", authRoutes);
+app.get("/test", async () => {
   return new Response("hello world");
 });
 // 同步 Sequelize 模型
