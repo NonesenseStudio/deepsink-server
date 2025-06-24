@@ -2,7 +2,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
-import authRoutes from "./routes/auth.routes";
+import authRoute from "./routes/auth.route";
+import chatRoute from "./routes/chat.route";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
 
@@ -15,7 +16,8 @@ app.use("*", logger());
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 //注册接口
 app.get("/", (c) => c.text("Hono API"));
-app.route("/auth", authRoutes);
+app.route("/auth", authRoute);
+// app.route("/chat", chatRoute);
 app.get("/test", async () => {
   return new Response("hello world");
 });

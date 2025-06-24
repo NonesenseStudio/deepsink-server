@@ -21,13 +21,13 @@
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "wrangler": "^4.20.0"
+    "wrangler": "^4.20.5"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.4",
     "bcryptjs": "^3.0.2",
     "drizzle-orm": "^0.44.2",
-    "hono": "^4.7.11",
+    "hono": "^4.8.2",
     "jsonwebtoken": "^9.0.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"

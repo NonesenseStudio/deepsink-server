@@ -16,3 +16,7 @@ enabled = true
 
 [dev]
 port = 3000
+
+[[r2_buckets]]
+binding = 'R2' # <~ valid JavaScript variable name
+bucket_name = 'deep-sink'
