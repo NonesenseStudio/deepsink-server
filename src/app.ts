@@ -3,7 +3,6 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
 import authRoute from "./routes/auth.route";
-import chatRoute from "./routes/chat.route";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
 
