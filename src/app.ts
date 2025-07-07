@@ -3,7 +3,8 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import authRoute from "./routes/auth.route";
 import modelRoute from "./routes/model.route";
-// import sessionRoute from "./routes/session.route";
+import sessionRoute from "./routes/session.route";
+import chatRoute from "./routes/chat.route";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
 
@@ -18,7 +19,8 @@ app.use("*", logger());
 app.get("/", (c) => c.text("Hono API"));
 app.route("/auth", authRoute);
 app.route("/models", modelRoute);
-// app.route("/sessions", sessionRoute);
+app.route("/sessions", sessionRoute);
+app.route("/chat", chatRoute);
 app.get("/test", async () => {
   return new Response("hello world");
 });

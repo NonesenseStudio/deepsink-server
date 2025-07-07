@@ -14,20 +14,20 @@
   "packageManager": "pnpm@10.11.1",
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.0.3",
+    "@types/node": "^24.0.10",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
-    "drizzle-kit": "^0.31.1",
+    "drizzle-kit": "^0.31.4",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "wrangler": "^4.20.5"
+    "wrangler": "^4.23.0"
   },
   "dependencies": {
-    "@hono/node-server": "^1.14.4",
+    "@hono/node-server": "^1.15.0",
     "bcryptjs": "^3.0.2",
     "drizzle-orm": "^0.44.2",
-    "hono": "^4.8.2",
+    "hono": "^4.8.4",
     "jsonwebtoken": "^9.0.2",
     "openai": "^5.7.0",
     "swagger-jsdoc": "^6.2.8",

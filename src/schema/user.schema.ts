@@ -1,6 +1,7 @@
 import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
 import { baseColumns } from "./core.schema";
 import { models } from "./model.schema";
+import { sql } from "drizzle-orm";
 
 export const users = sqliteTable("users", {
   ...baseColumns,
@@ -9,12 +10,15 @@ export const users = sqliteTable("users", {
   refresh_token: text("refresh_token"),
 });
 
-export const user_model = sqliteTable("user_model", {
+export const user_models = sqliteTable("user_models", {
   ...baseColumns,
-  user_id: text("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id),
-  model_id: text("model_id")
+  modelId: text("model_id")
     .notNull()
     .references(() => models.id),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
 });

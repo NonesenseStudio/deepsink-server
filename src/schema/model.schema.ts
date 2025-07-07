@@ -4,13 +4,13 @@ import { baseColumns } from "./core.schema";
 
 export const models = sqliteTable("models", {
   ...baseColumns,
-  user_id: text("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
-  model_name: text("model_name").notNull(),
-  api_key: text("api_key").notNull(),
-  base_url: text("base_url"),
+  modelName: text("model_name").notNull(),
+  apiKey: text("api_key").notNull(),
+  baseUrl: text("base_url"),
   stream: integer("stream").default(0),
   disabled: integer().default(0), // 0表示启用，1表示禁用
   // modelVersion: text("model_version"),
