@@ -144,24 +144,13 @@ app.post("/refresh", async (c) => {
       .get();
 
     if (!user) {
-      return c.json({ error: "无效的刷新令牌" }, 401);
+      return c.json({ error: "无效的刷新令牌" }, 400);
     }
 
     // 生成新的access token
     const newAccessToken = jwt.sign({ userId }, "secret key", {
       expiresIn: "1h",
     });
-
-    // 生成新的refresh token（可选：实现刷新令牌轮换）
-    // const newRefreshToken = jwt.sign({ userId }, "refresh secret", {
-    //   expiresIn: "7d",
-    // });
-
-    // 更新数据库中的refresh token
-    // await db
-    //   .update(users)
-    //   .set({ refresh_token: newRefreshToken })
-    //   .where(eq(users.id, userId));
 
     return c.json(
       {
@@ -175,7 +164,7 @@ app.post("/refresh", async (c) => {
       return c.json({ error: "刷新令牌已过期" }, 401);
     }
     console.error("刷新令牌失败:", error);
-    return c.json({ error: "无效的刷新令牌" }, 401);
+    return c.json({ error: "无效的刷新令牌" }, 400);
   }
 });
 
@@ -184,7 +173,6 @@ app.post("/logout", async (c) => {
   const db = DB(c.env);
   try {
     const { refresh_token } = await c.req.json();
-    console.log(refresh_token);
     if (!refresh_token) {
       return c.json({ error: "缺少刷新令牌" }, 400);
     }

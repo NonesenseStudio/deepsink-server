@@ -101,8 +101,7 @@ app.post("/create", async (c: any) => {
       .insert(models)
       .values({
         id: generateUuid(),
-        created_at: new Date(),
-        user_id: userId,
+        userId,
         ...body,
       })
       .returning();
@@ -121,7 +120,7 @@ app.put("/update/:id", async (c) => {
   delete body.created_at;
   const updatedModel = await db
     .update(models)
-    .set(body)
+    .set({ ...body, updatedAt: new Date().valueOf() })
     .where(eq(models.id, id))
     .returning();
   if (updatedModel.length === 0) {
@@ -149,7 +148,6 @@ app.post("/select-model", async (c: any) => {
   const db = DB(c.env);
   const userId = c.user?.userId;
   const { modelId } = await c.req.json();
-  console.log(modelId);
   try {
     // 检查模型是否存在
     const modelExists = await db
@@ -170,7 +168,7 @@ app.post("/select-model", async (c: any) => {
       // 更新已有记录的 model_id
       const updatedModel = await db
         .update(user_models)
-        .set({ modelId, updatedAt: new Date() })
+        .set({ modelId, updatedAt: new Date().valueOf() })
         .where(eq(user_models.userId, userId))
         .returning();
 
@@ -180,11 +178,8 @@ app.post("/select-model", async (c: any) => {
       const newModel = await db
         .insert(user_models)
         .values({
-          id: generateUuid(),
-          createdAt: new Date(),
           userId,
           modelId,
-          updatedAt: new Date(),
         })
         .returning();
 
@@ -209,14 +204,12 @@ app.post("/current-model", async (c: any) => {
       .where(eq(user_models.userId, userId))
       .orderBy(desc(user_models.id)) // 假设最新的记录为当前使用的模型
       .limit(1);
-    console.log(selectedModelRecord);
     if (selectedModelRecord.length === 0) {
       return c.json({ error: "No model selected" }, 404);
     }
 
     const modelId = selectedModelRecord[0].modelId;
 
-    console.log(modelId);
     // 根据 modelId 查询模型表以获取模型的详细信息
     const model = await db.select().from(models).where(eq(models.id, modelId));
     if (model.length === 0) {

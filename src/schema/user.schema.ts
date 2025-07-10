@@ -18,7 +18,4 @@ export const user_models = sqliteTable("user_models", {
   modelId: text("model_id")
     .notNull()
     .references(() => models.id),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`(unixepoch())`),
 });

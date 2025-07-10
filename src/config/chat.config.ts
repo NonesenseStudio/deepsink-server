@@ -15,7 +15,7 @@ export const getSessionTitle = async (userMessage: string) => {
           {
             role: "system",
             content:
-              "你是一个多语言标题生成专家，接下来我会给你一段用户输入的内容，请你生成一个会话标题，只需要返回标题即可，需要突出主题，使用陈述句表达，",
+              "你是一个多语言标题生成专家，接下来我会给你一段用户输入的内容，请你生成一个会话标题，只需要返回标题即可，需要突出主题，使用陈述句表达",
           },
           {
             role: "user",
@@ -25,6 +25,5 @@ export const getSessionTitle = async (userMessage: string) => {
       }),
     },
   ).then((response) => response.json());
-  console.log(data);
   return data.choices[0].message.content;
 };

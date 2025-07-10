@@ -7,7 +7,10 @@ export const baseColumns = {
     .primaryKey()
     .$defaultFn(() => generateUuid()) // 自动注入短UUID
     .notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: integer("created_at", { mode: "number" })
     .notNull()
-    .default(sql`(unixepoch())`),
+    .default(sql`(unixepoch()*1000)`),
+  updatedAt: integer("updated_at", { mode: "number" })
+    .notNull()
+    .default(sql`(unixepoch()*1000)`),
 };
