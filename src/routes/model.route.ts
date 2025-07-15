@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 import { DB, Env } from "../config/db.config";
 import { models } from "../schema/model.schema";
 import { user_models } from "../schema/user.schema";
-import { and, asc, count, desc, eq, sql } from "drizzle-orm";
-import jwt from "jsonwebtoken";
+import { and, count, desc, eq, sql } from "drizzle-orm";
 import { tokenMiddleware } from "../config/auth.config";
 import { generateUuid } from "../utils";
 
@@ -18,30 +17,30 @@ app.use("*", tokenMiddleware);
 // 获取所有模型
 app.get("/", async (c: any) => {
   const db = DB(c.env);
-  const userId = c.user?.userId;
+  const providerId = c.req.param("id");
   const allModels = await db
     .select()
     .from(models)
-    .where(eq(models.userId, userId));
+    .where(eq(models.providerId, providerId));
   return c.json(allModels);
 });
 
 app.post("/pages", async (c: any) => {
   const db = DB(c.env);
-  const userId = c.user?.userId;
   let {
     page = 1,
     pageSize = 10,
     keyword,
     sortBy,
     sortOrder,
+    providerId,
   } = await c.req.json();
   try {
     // 计算分页的偏移量
     const offset = (page - 1) * pageSize;
     const modelName = keyword;
     // 构建查询条件
-    const conditions = [eq(models.userId, userId)];
+    const conditions = [eq(models.providerId, providerId)];
     if (modelName) {
       conditions.push(eq(models.modelName, modelName));
     }
@@ -96,12 +95,10 @@ app.post("/create", async (c: any) => {
   const db = DB(c.env);
   try {
     const body = await c.req.json();
-    const userId = c.user?.userId;
     const newModel = await db
       .insert(models)
       .values({
         id: generateUuid(),
-        userId,
         ...body,
       })
       .returning();

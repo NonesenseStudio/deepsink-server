@@ -11,3 +11,11 @@ export const generateUuid = (withHyphens: boolean = false): string => {
   }
   return withHyphens ? uuid : uuid.slice(0, 16);
 };
+
+export const encodeBase64 = (data: string) => {
+  return Buffer.from(data).toString("base64");
+};
+
+export const decodeBase64 = (encodedData: string) => {
+  return Buffer.from(encodedData, "base64").toString("utf-8");
+};

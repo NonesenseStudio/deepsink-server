@@ -7,7 +7,7 @@ export const users = sqliteTable("users", {
   ...baseColumns,
   username: text("username").notNull().unique(),
   password: text("password").notNull(), // 存储bcrypt哈希值
-  refresh_token: text("refresh_token"),
+  refresh_token: text("refresh_token")
 });
 
 export const user_models = sqliteTable("user_models", {

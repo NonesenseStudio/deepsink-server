@@ -5,6 +5,7 @@ import authRoute from "./routes/auth.route";
 import modelRoute from "./routes/model.route";
 import sessionRoute from "./routes/session.route";
 import chatRoute from "./routes/chat.route";
+import providerRoute from "./routes/provider.route";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
 
@@ -21,6 +22,7 @@ app.route("/auth", authRoute);
 app.route("/models", modelRoute);
 app.route("/sessions", sessionRoute);
 app.route("/chat", chatRoute);
+app.route("/providers", providerRoute);
 app.get("/test", async () => {
   return new Response("hello world");
 });
