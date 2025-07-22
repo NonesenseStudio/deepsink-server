@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import bcrypt from "bcryptjs";
 import { DB } from "../config/db.config";
-import { users } from "../schema/user.schema";
+import { users, user_models } from "../schema/user.schema";
 import { and, eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 import { generateUuid } from "../utils";
@@ -220,13 +220,21 @@ app.post("/guest-login", async (c) => {
     const newUser = await db
       .insert(users)
       .values({
-        id: generateUuid(),
+        id: "guest-" + generateUuid(),
         role: "guest",
         username: guestUsername,
         password: hashedPassword, // 存储哈希后的密码
       })
       .returning()
       .get();
+
+    const newModel = await db
+      .insert(user_models)
+      .values({
+        userId: newUser.id,
+        modelId: "2428a62f5427bdc7",
+      })
+      .returning();
 
     // 生成token
     // 生成access token (1小时有效期)

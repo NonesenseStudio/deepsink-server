@@ -15,7 +15,7 @@ export const user_models = sqliteTable("user_models", {
   ...baseColumns,
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   modelId: text("model_id")
     .notNull()
     .references(() => models.id),
