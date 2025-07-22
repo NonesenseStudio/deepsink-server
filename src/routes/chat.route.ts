@@ -54,11 +54,10 @@ app.post("/messages", async (c: any) => {
   if (!sessionId) {
     //新建session
     sessionId = generateUuid(true);
-    title = await getSessionTitle(content);
     await db.insert(sessions).values({
       id: String(sessionId),
       userId,
-      title,
+      title: "",
       createdAt: new Date().valueOf(),
       updatedAt: new Date().valueOf(),
     });
@@ -114,15 +113,52 @@ app.post("/messages", async (c: any) => {
     })),
     { role, content },
   ]);
-
   if (model[0].stream) {
     // 处理流式响应
     // c.header('Content-Encoding', 'Identity')
-    return stream(c, async (s) => {
+    return streamText(c, async (s) => {
+      let content = "";
+      let newSessionItem = {};
+      let messageId = "";
       for await (const chunk of completion) {
-        const content = chunk.choices[0]?.delta?.content || "";
-        await s.write(JSON.stringify(chunk)); // 逐块发送增量内容
+        content += chunk.choices[0]?.delta?.content || "";
+        if (newSession) {
+          chunk["sessionId"] = sessionId;
+          if (chunk.choices[0]?.finish_reason === "stop") {
+            title = await getSessionTitle(`[
+            {
+              role: "user",
+              content: ${content},
+            },
+            {
+              role: "assistant",
+              content: ${content},
+            },
+          ]`);
+            newSessionItem["title"] = title;
+            chunk["title"] = title;
+          }
+        }
+        if (chunk.choices[0]?.finish_reason === "stop") {
+          messageId = chunk.id;
+        }
+        await s.write(chunk.choices[0]?.delta?.content || ""); // 逐块发送增量内容
       }
+      // 更新会话时间
+      await db
+        .update(sessions)
+        .set({ ...newSessionItem, updatedAt: new Date().valueOf() })
+        .where(eq(sessions.id, sessionId));
+      const assistantMessage: any = {
+        id: messageId,
+        sessionId,
+        role: "assistant",
+        content,
+        model: model[0].modelCode,
+        createdAt: new Date().valueOf(),
+        updatedAt: new Date().valueOf(),
+      };
+      await db.insert(messages).values(assistantMessage);
     });
   } else {
     const aiResponse = completion.choices[0].message.content;
@@ -137,13 +173,26 @@ app.post("/messages", async (c: any) => {
       updatedAt: new Date().valueOf(),
     };
     await db.insert(messages).values(assistantMessage);
-
+    let newSessionItem = {};
+    if (newSession) {
+      title = await getSessionTitle(`[
+      {
+        role: "user",
+        content: ${content},
+      },
+      {
+        role: "assistant",
+        content: ${aiResponse},
+      },
+    ]`);
+      newSessionItem["title"] = title;
+    }
     // 更新会话时间
     await db
       .update(sessions)
-      .set({ updatedAt: new Date().valueOf() })
+      .set({ ...newSessionItem, updatedAt: new Date().valueOf() })
       .where(eq(sessions.id, sessionId));
-    let newSessionItem = newSession
+    newSessionItem = newSession
       ? {
           sessionId,
           title,

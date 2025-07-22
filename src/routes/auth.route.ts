@@ -106,11 +106,12 @@ app.post("/login", async (c) => {
       .set({ refresh_token: refreshToken })
       .where(eq(users.id, user.id));
     // 6. 返回响应（排除密码字段）
-    const { password: _, refresh_token, ...safeUser } = user;
+    const { password: _, refresh_token, role, ...safeUser } = user;
     return c.json(
       {
         message: "登录成功",
         user: safeUser,
+        role: role,
         access_token: accessToken,
         refresh_token: refreshToken,
       },
@@ -181,17 +182,83 @@ app.post("/logout", async (c) => {
     const decoded: any = jwt.verify(refresh_token, "refresh secret");
     const userId = decoded.userId;
 
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .get();
     // 清除数据库中的refresh token
-    await db
-      .update(users)
-      .set({ refresh_token: null })
-      .where(eq(users.id, userId));
-
+    if (user.role === "guest") {
+      await db.delete(users).where(eq(users.id, userId));
+    } else {
+      await db
+        .update(users)
+        .set({ refresh_token: null })
+        .where(eq(users.id, userId));
+    }
     return c.json({ message: "登出成功" }, 200);
   } catch (error) {
     console.error("登出失败:", error);
     // 即使验证失败也返回成功，避免泄露信息
     return c.json({ message: "登出成功" }, 200);
+  }
+});
+
+// 游客登录接口
+app.post("/guest-login", async (c) => {
+  const db = DB(c.env);
+  try {
+    // 生成一个临时用户名和密码
+    const guestUsername = `guest_${generateUuid()}`;
+    const guestPassword = generateUuid();
+
+    // 安全处理密码（使用BCrypt哈希）
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(guestPassword, saltRounds);
+
+    // 创建新用户
+    const newUser = await db
+      .insert(users)
+      .values({
+        id: generateUuid(),
+        role: "guest",
+        username: guestUsername,
+        password: hashedPassword, // 存储哈希后的密码
+      })
+      .returning()
+      .get();
+
+    // 生成token
+    // 生成access token (1小时有效期)
+    const accessToken = jwt.sign({ userId: newUser.id }, "secret key", {
+      expiresIn: "1h",
+    });
+
+    // 生成refresh token (7天有效期)
+    const refreshToken = jwt.sign({ userId: newUser.id }, "refresh secret", {
+      expiresIn: "7d",
+    });
+    // 更新用户表中的refresh_token
+    await db
+      .update(users)
+      .set({ refresh_token: refreshToken })
+      .where(eq(users.id, newUser.id));
+
+    // 返回响应（排除密码字段）
+    const { password: _, refresh_token, ...safeUser } = newUser;
+    return c.json(
+      {
+        message: "游客登录成功",
+        user: safeUser,
+        role: "guest",
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      },
+      201,
+    );
+  } catch (error) {
+    console.error("游客登录失败:", error);
+    return c.json({ error: "服务器内部错误" }, 500);
   }
 });
 // 导出路由
