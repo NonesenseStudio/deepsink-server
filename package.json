@@ -14,23 +14,23 @@
   "packageManager": "pnpm@10.11.1",
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.0.15",
+    "@types/node": "^24.2.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "drizzle-kit": "^0.31.4",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
-    "wrangler": "^4.25.0"
+    "typescript": "^5.9.2",
+    "wrangler": "^4.28.1"
   },
   "dependencies": {
-    "@hono/node-server": "^1.17.1",
+    "@hono/node-server": "^1.18.1",
     "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.13",
-    "drizzle-orm": "^0.44.3",
-    "hono": "^4.8.5",
+    "drizzle-orm": "^0.44.4",
+    "hono": "^4.9.0",
     "jsonwebtoken": "^9.0.2",
-    "openai": "^5.10.1",
+    "openai": "^5.12.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
